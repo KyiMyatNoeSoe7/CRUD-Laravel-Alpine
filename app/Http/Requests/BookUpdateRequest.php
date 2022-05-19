@@ -25,7 +25,7 @@ class BookUpdateRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'author' => 'required|string|author|max:255',
+            'author' => 'required|string|max:255',
         ];
     }
 }

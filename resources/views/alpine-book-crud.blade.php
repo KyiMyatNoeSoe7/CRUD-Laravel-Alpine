@@ -114,8 +114,8 @@
                     },
                 books: [],
                 errors:{
-                    title :'',
-                    author:'',
+                    title : "",
+                    author: "",
                 },
 
                 init() {
@@ -124,12 +124,12 @@
                         this.books = response.data;
                     });
                 },
+
                 saveData(){
-                    this.errors = [],
+                    this.errors = {},
                     axios.post('/api/book',this.data)
                     .then((response) => {
                         this.init();
-                        this.data.id = "";
                         this.data.title = "";
                         this.data.author = "";
                     })
@@ -138,49 +138,52 @@
                         let errors = error.response.data.errors;
                         this.errors = errors
                         }
+                    }); 
+                },
+
+                editData(book) {
+                    this.addMode = false;
+                    this.data.id = book.id;
+                    this.data.title = book.title;
+                    this.data.author = book.author;
+                },
+
+                updateData() {
+                    this.errors = {},
+                    axios.put(`/api/book/${this.data.id}`,this.data)
+                    .then((response) => {
+                        this.init();
+                        this.data.title = "";
+                        this.data.author = "";
+                    }).catch(error => {
+                        if (error.response) {
+                        let errors = error.response.data.errors;
+                        this.errors = errors
+                        }
                     });
-                   
-                    },
-                    editData(book) {
-                        this.addMode = false;
-                        this.data.id = book.id;
-                        this.data.title = book.title;
-                        this.data.author = book.author;
-                    },
-                    updateData() {
-                        this.errors = [],
-                        axios.put(`/api/book/${this.data.id}`,this.data)
+                },
+
+                deleteData(id) {
+                    if (confirm("Are you sure to delete this post ?")) {
+                        axios.delete(`/api/book/${id}`)
                         .then((response) => {
                             this.init();
-                            this.data.title = "";
-                            this.data.author = "";
-                        }).catch(error => {
-                            if (error.response) {
-                            let errors = error.response.data.errors;
-                            this.errors = errors
-                            }
-                        });
-                    },
-                    deleteData(id) {
-                        if (confirm("Are you sure to delete this post ?")) {
-                            axios.delete(`/api/book/${id}`)
-                            .then((response) => {
-                                this.init();
-                            })
-                        }
-                    },
-                    cancelEdit(){
-                        this.resetForm()
-                    },
-                    resetForm() {
-                        this.addMode = true;
-                        this.data.id = '';
-                        this.data.title = '';
-                        this.data.author = '';
+                        })
                     }
+                },
+
+                cancelEdit(){
+                    this.resetForm()
+                },
+
+                resetForm() {
+                    this.addMode = true;
+                    this.data.id = '';
+                    this.data.title = '';
+                    this.data.author = '';
                 }
             }
-        
+        }
     </script>
 
 </body>
