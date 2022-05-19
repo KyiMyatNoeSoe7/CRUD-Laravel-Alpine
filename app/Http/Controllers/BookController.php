@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Book;
+use Illuminate\Http\Request;
+use App\Http\Requests\BookStoreRequest;
+use App\Http\Requests\BookUpdateRequest;
 
 class BookController extends Controller
 {
@@ -20,11 +22,11 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  BookStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(BookStoreRequest $request)
+    {   
         Book::create(
                     [
                         'id' => $request->id,
@@ -40,7 +42,7 @@ class BookController extends Controller
         return Book::all();
     }
 
-    public function update(Request $request, $id) 
+    public function update(BookUpdateRequest $request, $id) 
     {   
         $book = Book::findOrFail($id);
         $book->title = $request->title;

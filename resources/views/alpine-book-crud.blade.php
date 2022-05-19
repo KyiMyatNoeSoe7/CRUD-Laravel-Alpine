@@ -40,9 +40,9 @@
                                         <td x-text="book.title"></td>
                                         <td x-text="book.author"></td>
                                         <td>
-                                            <button @click.prevent="editData(book)"
+                                            <button @click="editData(book)"
                                                 class="btn btn-info">Edit</button>
-                                            <button @click.prevent="deleteData(book.id)"
+                                            <button @click="deleteData(book.id)"
                                                 class="btn btn-danger">Delete</button>
                                         </td>
                                     </tr>
@@ -64,10 +64,16 @@
                                 <label>Title</label>
                                 <input x-model="data.title" type="text" class="form-control" placeholder="Enter Title">
                             </div>
+                            <template x-if="errors.title">
+                                <p class="text-danger" x-text="errors.title[0]"></p>
+                            </template>
                             <div class="form-group">
                                 <label>Author</label>
                                 <input x-model="data.author" type="text" class="form-control" placeholder="Enter Author">
                             </div>
+                            <template x-if="errors.author">
+                                <p class="text-danger" x-text="errors.author[0]"></p>
+                              </template>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Save</button>
                             </div>
@@ -77,10 +83,16 @@
                                 <label>Title</label>
                                 <input x-model="data.title" type="text" class="form-control" placeholder="Enter Title">
                             </div>
+                            <template x-if="errors.title">
+                                <p class="text-danger" x-text="errors.title[0]"></p>
+                              </template>
                             <div class="form-group">
                                 <label>Author</label>
                                 <input x-model="data.author" type="text" class="form-control" placeholder="Enter Author">
                             </div>
+                            <template x-if="errors.author">
+                                <p class="text-danger" x-text="errors.author[0]"></p>
+                              </template>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Update</button>
                                 <button type="button" class="btn btn-danger" @click.prevent="cancelEdit">Cancel Edit</button>
@@ -94,15 +106,17 @@
 
     <script>
         function bookCrud() {
-            console.log("hello");
             return {
                 addMode: true,
                 data: {
-                        id: "",
                         title: "",
                         author: "",
                     },
                 books: [],
+                errors:{
+                    title :'',
+                    author:'',
+                },
 
                 init() {
                     axios.get('/api/book')
@@ -111,13 +125,21 @@
                     });
                 },
                 saveData(){
+                    this.errors = [],
                     axios.post('/api/book',this.data)
                     .then((response) => {
                         this.init();
                         this.data.id = "";
                         this.data.title = "";
                         this.data.author = "";
+                    })
+                    .catch(error => {
+                        if (error.response) {
+                        let errors = error.response.data.errors;
+                        this.errors = errors
+                        }
                     });
+                   
                     },
                     editData(book) {
                         this.addMode = false;
@@ -126,12 +148,18 @@
                         this.data.author = book.author;
                     },
                     updateData() {
+                        this.errors = [],
                         axios.put(`/api/book/${this.data.id}`,this.data)
                         .then((response) => {
                             this.init();
                             this.data.title = "";
                             this.data.author = "";
-                        })
+                        }).catch(error => {
+                            if (error.response) {
+                            let errors = error.response.data.errors;
+                            this.errors = errors
+                            }
+                        });
                     },
                     deleteData(id) {
                         if (confirm("Are you sure to delete this post ?")) {
