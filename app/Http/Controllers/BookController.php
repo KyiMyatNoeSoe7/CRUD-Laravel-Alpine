@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
-use Illuminate\Http\Request;
 use App\Http\Requests\BookStoreRequest;
 use App\Http\Requests\BookUpdateRequest;
 
@@ -16,7 +15,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        return Book::get();
+        return Book::all();
     }
    
     /**
@@ -27,21 +26,33 @@ class BookController extends Controller
      */
     public function store(BookStoreRequest $request)
     {   
-        Book::create(
-                    [
-                        'id' => $request->id,
-                        'title' => $request->title, 
-                        'author' => $request->author,
-                    ]);
-        return Book::all();
+        $book = new Book;
+        $book->title = $request->title;
+        $book->author = $request->author;
+
+        $book->save();
+        return $book;
     }
     
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
-        Book::find($id);
-        return Book::all();
+        $book = Book::findOrFail($id);
+        return $book;
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  BookUpdateRequest  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(BookUpdateRequest $request, $id) 
     {   
         $book = Book::findOrFail($id);
@@ -49,21 +60,21 @@ class BookController extends Controller
         $book->author = $request->author;
     
         $book->update();
-        return Book::all();
+        return $book;
     }
    
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Product  $product
+     * @param  \App\Book  $book
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $book = Book::find($id);
+        $book = Book::findOrFail($id);
    
         $book->delete();
 
-        return Book::all();
+        return response()->json('Book successfully deleted!');
     }
 }
