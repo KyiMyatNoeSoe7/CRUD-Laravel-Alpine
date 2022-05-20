@@ -4,10 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Laravel 8 CRUD Tutorial</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script defer src="https://unpkg.com/alpinejs@3.10.2/dist/cdn.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link href="{{ mix('css/app.css') }}" type="text/css" rel="stylesheet" />
+    <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
 
 <body>
@@ -63,7 +61,7 @@
                             <template x-if="errors.title">
                                 <p class="text-danger" x-text="errors.title[0]"></p>
                             </template>
-                            <div class="form-group">
+                            <div class="form-group mt-3">
                                 <label>Author</label>
                                 <input x-model="data.author" type="text" class="form-control"
                                     placeholder="Enter Author">
@@ -71,8 +69,8 @@
                             <template x-if="errors.author">
                                 <p class="text-danger" x-text="errors.author[0]"></p>
                             </template>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary"
+                            <div class="form-group mt-3">
+                                <button type="submit" class="btn btn-primary ml-2"
                                     x-text="addMode == true ? 'Create' : 'Update'"></button>
                                 <button type="button" class="btn btn-danger" @click="cancelEdit">Cancel</button>
                             </div>
