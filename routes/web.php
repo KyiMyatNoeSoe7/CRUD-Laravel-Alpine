@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('alpine-book-crud');
 });
+
+// Route::get('/student-session', function () {
+//     return view('student-session');
+// });
+Route::get('/student-session',[SessionController::class,'get'])->name('student-session.get');
+Route::post('/student-session',[SessionController::class,'store'])->name('student-session.store');
+Route::get('/student-session/show',[SessionController::class,'show'])->name('student-session.show');
